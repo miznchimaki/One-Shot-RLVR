@@ -37,6 +37,8 @@ pip install flash-attn --no-build-isolation
 pip install wandb matplotlib
 pip install huggingface_hub
 ```
+If you are using H100 nodes and see errors like `CUDA error: device kernel image is invalid`, please refer to [this issue](https://github.com/ypwang61/One-Shot-RLVR/issues/22#issuecomment-3066442183) for fixing the problem.
+
 ### Eval Enviroment
 Our evaluation pipeline for math reasoning tasks is adapted from [Qwen2.5-Math](https://github.com/QwenLM/Qwen2.5-Math). The installation commands that we verified as viable are as follows:
 ```bash
@@ -89,7 +91,8 @@ Ground truth (label in DSR-sub):
 ## Training
 Before training, we can assign the checkpoint path:
 ```bash
-export CHECKPOINTS_DIR=./checkpoints/ # your checkpoint path
+export CHECKPOINTS_DIR=./checkpoints # your checkpoint path
+export WANDB_API_KEY=... # your wandb api key
 ```
 
 To run 1-shot RLVR with $\pi_1$, we can run:
