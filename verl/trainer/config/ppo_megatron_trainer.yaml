@@ -1,7 +1,15 @@
+hydra:
+  run:
+    dir: ${oc.env:HOME}/outputs/one-shot-rlvr/qwen-2-5-math-1-5b_pi1-r128_reproduce
+  job_logging:
+    handlers:
+      file:
+        filename: hydra_outputs.log
+
 data:
   tokenizer: null
-  train_files: ~/data/rlhf/gsm8k/train.parquet
-  val_files: ~/data/rlhf/gsm8k/test.parquet
+  train_files: ${oc.env:HOME}/datasets/rlhf/gsm8k/train.parquet
+  val_files: ${oc.env:HOME}/datasets/rlhf/gsm8k/test.parquet
   prompt_key: prompt
   max_prompt_length: 512
   max_response_length: 512
@@ -14,7 +22,7 @@ data:
 actor_rollout_ref:
   hybrid_engine: True
   model:
-    path: ~/models/deepseek-llm-7b-chat
+    path: ${oc.env:HOME}/ckpts/deepseek-llm-7b-chat
     external_lib: null
     override_config: {}
     enable_gradient_checkpointing: False
@@ -92,7 +100,7 @@ critic:
     warmup_style: constant  # select from constant/cosine
     total_training_steps: -1  # must be override by program
   model:
-    path: ~/models/deepseek-llm-7b-chat
+    path: ${oc.env:HOME}/ckpts/deepseek-llm-7b-chat
     tokenizer_path: ${actor_rollout_ref.model.path}
     override_config: {}
     external_lib: ${actor_rollout_ref.model.external_lib}
@@ -126,7 +134,7 @@ reward_model:
     seed: 1
   model:
     input_tokenizer: ${actor_rollout_ref.model.path}  # set this to null if the chat template is identical
-    path: ~/models/FsfairX-LLaMA3-RM-v0.1
+    path: ${oc.env:HOME}/ckpts/FsfairX-LLaMA3-RM-v0.1
     external_lib: ${actor_rollout_ref.model.external_lib}
   load_weight: True
   param_offload: False
