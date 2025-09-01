@@ -221,9 +221,11 @@ class MegatronPPOActor(BasePPOActor):
         """
         select_keys = ['responses', 'input_ids', 'attention_mask', 'position_ids', 'old_log_probs', 'advantages']
         data = data.select(batch_keys=select_keys)
-        return data.make_iterator(mini_batch_size=self.config.ppo_mini_batch_size,
+        return data.make_iterator(
+                                  mini_batch_size=self.config.ppo_mini_batch_size,
                                   epochs=self.config.ppo_epochs,
-                                  dataloader_kwargs={'shuffle': self.config.shuffle})
+                                  dataloader_kwargs={'shuffle': self.config.shuffle}
+                                 )
 
     def forward_backward_batch(self, data: DataProto, forward_only=False, post_process_fn=None):
         """

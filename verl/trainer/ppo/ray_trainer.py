@@ -479,13 +479,15 @@ class RayPPOTrainer(object):
     def _create_dataloader(self):
         from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
         # TODO: we have to make sure the batch size is divisible by the dp size
-        self.train_dataset = RLHFDataset(parquet_files=self.config.data.train_files,
+        self.train_dataset = RLHFDataset(
+                                         parquet_files=self.config.data.train_files,
                                          tokenizer=self.tokenizer,
                                          prompt_key=self.config.data.prompt_key,
                                          max_prompt_length=self.config.data.max_prompt_length,
                                          filter_prompts=True,
                                          return_raw_chat=self.config.data.get('return_raw_chat', False),
-                                         truncation='error')
+                                         truncation='error'
+                                        )
 
         print("Train_dataset size", len(self.train_dataset))
 
@@ -497,11 +499,13 @@ class RayPPOTrainer(object):
         else:
             sampler = SequentialSampler(data_source=self.train_dataset)
         
-        self.train_dataloader = DataLoader(dataset=self.train_dataset,
-                                                batch_size=self.config.data.train_batch_size,
-                                                drop_last=True,
-                                                collate_fn=collate_fn,
-                                                sampler=sampler)
+        self.train_dataloader = DataLoader(
+                                           dataset=self.train_dataset,
+                                           batch_size=self.config.data.train_batch_size,
+                                           drop_last=True,
+                                           collate_fn=collate_fn,
+                                           sampler=sampler
+                                          )
 
         self.val_dataset = RLHFDataset(parquet_files=self.config.data.val_files,
                                     tokenizer=self.tokenizer,

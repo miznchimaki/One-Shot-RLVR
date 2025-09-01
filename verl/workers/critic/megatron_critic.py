@@ -110,9 +110,11 @@ class MegatronPPOCritic(BasePPOCritic):
     def make_minibatch_iterator(self, data: DataProto) -> Iterable[DataProto]:
         select_keys = ['input_ids', 'responses', 'attention_mask', 'position_ids', 'values', 'returns']
         data = data.select(batch_keys=select_keys)
-        return data.make_iterator(mini_batch_size=self.config.ppo_mini_batch_size,
+        return data.make_iterator(
+                                  mini_batch_size=self.config.ppo_mini_batch_size,
                                   epochs=self.config.ppo_epochs,
-                                  dataloader_kwargs={'shuffle': self.config.shuffle})
+                                  dataloader_kwargs={'shuffle': self.config.shuffle}
+                                 )
 
     def forward_backward_batch(self, data: DataProto, forward_only=False):
         # broadcast from last pp rank to all other pp ranks

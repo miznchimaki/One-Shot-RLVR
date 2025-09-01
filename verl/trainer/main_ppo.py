@@ -19,6 +19,7 @@ import ray
 import hydra
 from verl.utils.reward_score import deepscaler
 
+
 @hydra.main(config_path='config', config_name='ppo_trainer', version_base=None)
 def main(config):
     run_ppo(config)
