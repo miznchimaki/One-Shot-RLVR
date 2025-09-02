@@ -3,7 +3,7 @@ set -x
 
 source ${HOME}/.bashrc  # for Centos
 source ${HOME}/depends/anaconda3/etc/profile.d/conda.sh  # for Ubuntu 22.04
-conda activate base
+conda activate whole_rl
 cd ${HOME}/projects/One-Shot-RLVR/
 
 VLLM_ATTENTION_BACKEND_VAR=${1:-"XFORMERS"}
