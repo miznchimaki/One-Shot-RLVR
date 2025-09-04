@@ -6,6 +6,8 @@ source ${HOME}/depends/anaconda3/etc/profile.d/conda.sh  # for Ubuntu 22.04
 conda activate whole_rl
 cd ${HOME}/projects/One-Shot-RLVR/
 
+export HYDRA_FULL_ERROR=1
+
 VLLM_ATTENTION_BACKEND_VAR=${1:-"XFORMERS"}
 TRAIN_FILES=${2:-"${HOME}/projects/One-Shot-RLVR/data/train/one_shot_rlvr/pi1_r128.parquet"}
 VAL_FILES=${3:-"${HOME}/projects/One-Shot-RLVR/data/test/math500.parquet"}
@@ -37,22 +39,20 @@ ROLLOUT_N_VAL=${28:-"1"}
 REF_FSDP_PARAM_OFFLOAD=${29:-"True"}
 KL_CTRL_KL_COEF=${30:-"0.001"}
 CRITIC_WARMUP=${31:-"0"}
-TRAINER_LOGGER=${32:-"['console', 'wandb']"}
+TRAINER_LOGGER=${32:-"['console']"}
 TRAINER_PROJECT_NAME=${33:-"RL-post-training"}
 TRAINER_EXPERIMENT_NAME=${34:-"One-Shot-RLVR-reproduce"}
 TRAINER_VAL_BEFORE_TRAIN=${35:-"True"}
-TRAINER_N_GPUS_PER_NODE=${36:-"8"}
+TRAINER_N_GPUS_PER_NODE=${36:-"1"}
 TRAINER_NNODES=${37:-"1"}
 TRAINER_SAVE_FREQ=${38:-"50"}
 TRAINER_TEST_FREQ=${39:-"50"}
 TRAINER_DEFAULT_HDFS_DIR=${40:-"null"}
 TRAINER_TOTAL_EPOCHS=${41:-"2000"}
 TRAINER_TOTAL_TRAINING_STEPS=${42:-""}
-WANDB_API_KEY_VAR=${43:-"d0e3b4ce28b4ce66736716005e3acaa1658fdcaf"}
 
 
 export VLLM_ATTENTION_BACKEND=${VLLM_ATTENTION_BACKEND_VAR}
-export WANDB_API_KEY=${WANDB_API_KEY_VAR}
 OUTPUT_DIR=`python3 -m verl.trainer.main_ppo --cfg hydra --package hydra.run.dir`
 if [ -d "${OUTPUT_DIR}" ]; then
     rm -rf "${OUTPUT_DIR}"
@@ -109,4 +109,4 @@ else
 fi
 
 
-python3 -m verl.trainer.main_ppo "${RL_PARAMS_ARR[@]}" 2>&1 | tee "${OUTPUT_DIR}/user_outputs.log"
+python3 -m verl.trainer.main_ppo "${RL_PARAMS_ARR[@]}" 2>&1 | tee ${OUTPUT_DIR}/user_outputs.log
